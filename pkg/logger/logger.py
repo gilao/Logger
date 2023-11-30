@@ -1,10 +1,6 @@
-import multiprocessing
-import os
-import time
 import logging
 from logging.handlers import TimedRotatingFileHandler
-import threading
-import inspect
+
 
 log_level_setting = {
     0: logging.DEBUG,
@@ -17,7 +13,7 @@ log_level_setting = {
 class Logger:
     def __init__(self, file, level):
         # 设置日志级别
-        if level > 5 or level < 1:
+        if level > 5 or level < 0:
             raise ValueError("The log level does not meet the specifications！")
 
         # 创建一个 logger，并设置 logger级别
@@ -36,18 +32,23 @@ class Logger:
         # 'W0' 到 'W6': 每周指定的星期几滚动一次日志文件，其中 'W0' 表示星期天，'W1' 表示星期一，依此类推。
         # self.handler = TimedRotatingFileHandler('test.log',when='S')
         self.handler = TimedRotatingFileHandler('test.log', when='midnight')
-
         self.handler.setLevel(log_level_setting[level])
-        # 在创建一个handler，用于输入控制台
-        self.console_handler = logging.StreamHandler()
-        self.console_handler.setLevel(logging.DEBUG)
         self.logger.addHandler(self.handler)
-        self.logger.addHandler(self.console_handler)
 
         # 定义handler 的输出格式
-        self.formatter = logging.Formatter(
-        '%(asctime)s - %(levelname)s - %(process)d - %(thread)d - %(filename)s - %(funcName)s - %(lineno)d - %(message)s')
+        self.formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(process)d - %(thread)d - %(filename)s - %(funcName)s - %(lineno)d - %(message)s')
         self.handler.setFormatter(self.formatter)
+
+        if level ==1:
+            # 在创建一个handler，用于输入控制台
+            self.console_handler = logging.StreamHandler()
+            self.console_handler.setLevel(level)
+            self.logger.addHandler(self.console_handler)
+            self.console_formatter = logging.Formatter(
+                '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)d - %(message)s')
+            self.console_handler.setFormatter(self.console_formatter)
+
+
     def debug(self, message):
         self.handler.flush()
         self.logger.debug(message)
