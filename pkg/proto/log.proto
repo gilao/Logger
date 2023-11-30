@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "./;proto";
+
+package proto;
+
+service LogModel {
+  rpc logging(Request) returns (Response) {}
+}
+
+message Request {
+  string query = 1;
+}
+
+message Response {
+  string result = 1;
+}
