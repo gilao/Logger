@@ -6,18 +6,17 @@ import grpc
 from concurrent import futures
 from pkg.proto import log_pb2
 from pkg.proto import log_pb2_grpc
-from pkg.logger import logger
+from pkg.logger.logger import log
 
 num = 0
-my_logger = logger.Logger('test.log',0)
 def a():
     p = 'text'
     while True:
-        my_logger.debug('time ' + p)
-        # my_logger.info('info ' + p)
-        # my_logger.error('error ' + p)
-        # my_logger.warning('warning ' + p)
-        # my_logger.critical('critical ' + p)
+        log.debug('time ' + p)
+        # log.info('info ' + p)
+        # log.error('error ' + p)
+        # log.warning('warning ' + p)
+        # log.critical('critical ' + p)
         # now = time.strftime('%Y-%m-%d-%H-%M-%S', time.localtime())
         # file_path = 'file.log'
         # file_descriptor = os.open(file_path, os.O_RDWR | os.O_CREAT)
@@ -32,11 +31,11 @@ class LogModel(log_pb2_grpc.LogModelServicer):
         result = str(num)
         response = log_pb2.Response()
         response.result = result
-        # my_logger.debug(request.query)
-        my_logger.info(request.query)
-        # my_logger.error(request.query)
-        # my_logger.warning(request.query)
-        # my_logger.critical(request.query)
+        # log.debug(request.query)
+        log.info(request.query)
+        # log.error(request.query)
+        # log.warning(request.query)
+        # log.critical(request.query)
         return response
 # 按装订区域中的绿色按钮以运行脚本。
 if __name__ == '__main__':
